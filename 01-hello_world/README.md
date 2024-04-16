@@ -7,3 +7,5 @@ How to run:
 1. rustc main.rs
 2. ./main
    or .\main.exe on Windows
+
+Rust is an ahead-of-time compiled language.
