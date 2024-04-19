@@ -1,4 +1,4 @@
-A example to show the basic usage of struct.
+An example to show the basic usage of struct.
 
 ## Struct
 
