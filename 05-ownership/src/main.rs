@@ -41,11 +41,21 @@ fn main() {
 
     println!("Mutable refenence: {}", ref1);
 
-    let first = first_word(&s2); // &String is implicitly converted to &str by Deref Coercions.
+    // Usage of String slice.
+    let first = first_word(&s2); // &String is implicitly converted to &str by Deref Coercions while passing the parameter.
 
     // s2.clear(); // This will get compiling error as s2 is referenced by the String slice.
 
     println!("First word is: {}", first);
+
+    // Other slices.
+    let list = [1, 2, 3, 4, 5];
+
+    let slice = &list[1..3]; // The slice has type &[i32].
+    println!("Slice is {:?}", slice);
+
+    assert_eq!(slice, &[2, 3]);
+
 }
 
 fn takes_ownership(some_string: String) { // some_string comes into scope
@@ -69,9 +79,9 @@ fn first_word(s: &str) -> &str {
 
     for (i, &item) in bytes.iter().enumerate() {
         if item == b' ' {
-            return &s[..i];
+            return &s[..i]; // Return a string slice.
         }
     }
 
-    &s[..]
+    &s[..] // Return a string slice.
 }

@@ -9,7 +9,7 @@ Ownership Rules:
 - There can only be one owner at a time.
 - When the owner goes out of scope, the value will be dropped.
 
-### String type
+### String Type
 `String` type is used to illustrate the rules of ownership.
 
 In order to support a mutable, growable piece of text, we need to allocate an amount of memory on the heap for `String`.
@@ -57,7 +57,7 @@ And Rust will never `automatically` do `Deep Copy` on your heap data.
 
 If you do want to do `Deep Copy` on the heap data of the String, please use a common method called `clone` instead. 
 
-### Copy trait
+### Copy Trait
 
 If a type implements the `Copy` trait, variables that use it 
 
@@ -116,7 +116,7 @@ A slice:
 - is a kind of reference.
 - doesn't have ownership.
 
-### String slice
+### String Slice
 
 `&str` is an immutable reference.
 
@@ -127,3 +127,14 @@ let s = "Hello world"
 Here `s` is a String slice (`&str`),  pointing to that specific point of the binary.
 
 `&String` can be implicitly converted to `&str` by [Deref Coercions](https://doc.rust-lang.org/stable/book/ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods).
+
+### Other Slices
+
+```rust
+let list = [1, 2, 3, 4, 5];
+
+let slice = &list[1..3]; // The slice has type &[i32].
+```
+
+The `slice` has type `&[i32]`. It works the same way as string slices do, by storing a reference to the first element and a length. 
+
