@@ -81,3 +81,45 @@ pub fn notify<T: Summary>(item: &T) {
     println!("Breaking news! {}", item.summarize());
 }
 ```
+
+### `+` for Multiple Trait Bounds
+
+We can also specify more than one trait bound with `+` operator. 
+
+```rust
+pub fn notify<T: Summary + Display>(item: &T) {
+}
+
+pub fn notify(item: &(impl Summary + Display)) {
+}
+```
+
+### `where` clause
+
+The below function signature is hard to read. 
+
+```rust
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+```
+
+It can be written with `where` clause to be clearer.
+
+```rust
+fn some_function<T, U>(t: &T, u: &U) -> i32
+where
+    T: Display + Clone,
+    U: Clone + Debug,
+{
+```
+
+## Traits as Returning Types
+
+We can also use the `impl Trait` syntax in the return position to return a value of some type that implements a trait.
+
+```rust
+fn returns_summarizable() -> impl Summary {
+```
+
+The ability to specify a return type only by the trait it implements is especially useful in the context of `closures and iterators`, which will be discussed later.
+
+You can only use impl Trait if you’re returning a `single` type. 
