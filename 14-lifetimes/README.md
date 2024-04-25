@@ -104,8 +104,31 @@ When we specify the lifetime parameters in this function signature, we’re:
 
 In the above example, the `longest` function doesn’t need to know exactly how long `x` and `y` will live, only that some scope can be substituted for 'a that will satisfy this signature.
 
+```rust
+let string1 = String::from("abcd");
 
+    let result;
+    {
+        let string2 = String::from("xyz");
+        result = longest(string1.as_str(), string2.as_str());
+        println!("The longest string is {}", result);
+    }
 
+    println!("The longest string is {}", result); // This won't compile.
+```
 
+The above code won't compile. 
+- The error shows that for `result` to be valid for the `println!` statement, `string2` would need to be `valid` until the end of the outer scope. 
+- Rust knows this because we `annotated` the lifetimes of the function parameters and return values using the `same` lifetime parameter `'a`.
 
+## Lifetime Annotations in Struct Definitions
 
+Structs can be defined to hold `references`, but in that case we would need to add a `lifetime annotation` on `every reference` in the struct’s definition.
+
+```rust
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+```
+
+The name of the generic lifetime parameter is declared inside angle brackets after the name of the struct so we can use the lifetime parameter in the body of the struct definition.
