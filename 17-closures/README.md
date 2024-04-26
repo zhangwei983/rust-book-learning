@@ -149,23 +149,13 @@ fn main() {
 }
 ```
 
+The above code won't compile as sort_by_key require a closure implement the `FnMut` trait, but the closure here only implemented the `FnOnce` trait.
+
 The closure:
-- captures value then moves `value out of` the closure by `transferring` ownership of value to the `sort_operations` vector. 
-- can be called `only once`  
-  trying to call it a second time wouldn’t work because value would no longer be in the environment to be pushed into sort_operations again! 
+- captures value then moves `value` out of the closure by `transferring` ownership of value to the `sort_operations` vector. 
 - only implements `FnOnce`. 
-
-What does `move captured values out of the closure` exactly mean?
-
-My understanding:
-1. The closure captures String `value` into its environment.
-2. When sorting the list, the `r.width` will be called multiple times to compare. This means 
-   ```rust
-   sort_operations.push(value);
-   ```
-   will be called multiple times.  
-   But when it's been called on the first time, it will be moved out of the closure by transferring ownership of value to the sort_operations vector.
-3. You can think of this as the closure is executed as an `anonymous` functions with all the variables it needs, on a `separate stack`. If some variables are moved out from the stack by by transferring ownership, then they cannot be used any more in the current function.
+- can be called `only once`  
+  trying to call it a second time wouldn’t work because `value` would no longer be in the environment to be pushed into `sort_operations` again.
 
 Change the closure as below, then it can implement the `FnMut` trait.
 ```rust
@@ -175,3 +165,15 @@ Change the closure as below, then it can implement the `FnMut` trait.
         r.width
     });
 ```
+
+### What does `move captured values out of the closure` exactly mean?
+
+My understanding:
+- The closure captures String `value` into its environment.
+- When sorting the list, the `r.width` will be called multiple times to compare. This means 
+   ```rust
+   sort_operations.push(value);
+   ```
+   will be called multiple times.  
+   But when it's been called on the first time, it will be moved out of the closure by transferring ownership of value to the sort_operations vector.
+- You can think of this as the closure is executed as an `anonymous` functions with all the variables it needs, on a `separate stack`. If some variables are moved out from the stack by by transferring ownership, then they cannot be used any more in the current function.
