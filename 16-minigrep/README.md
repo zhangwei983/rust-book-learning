@@ -21,7 +21,7 @@ along with some new features introduced, including
 - closure
 - eprintln!
 
-So here we will describe the new features
+So here we will describe the new features that we use in this example.
 
 ## std::env::args()
 
@@ -73,23 +73,6 @@ eprintln!("Print to standard error stream.");
 
 Meanwhile `println!` macro prints to the standard `output` stream.
 
-## Improve Modularity and Error Handling
+## Box<dyn Error>
 
-### Separation of Concerns for Binary Projects
-
-Split your program into a `main.rs` and a `lib.rs`. It's about separating concerns: 
-- main.rs handles running the program, 
-- and lib.rs handles all the logic of the task at hand. 
-
-A call to panic! is more appropriate for a programming problem than a usage problem
-
-unwrap_or_else
-
-
-Box<dyn Error> means the function will return a type that implements the Error trait, but we don’t have to specify what particular type the return value will be.
-
-if let
-
-env::var
-
-eprintln!
+`Box<dyn Error>` means the function will return a type that implements the `Error` trait, but we don’t have to specify what particular type the return value will be. We will talk about it in later example.
