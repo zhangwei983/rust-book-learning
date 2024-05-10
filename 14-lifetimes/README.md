@@ -132,3 +132,58 @@ struct ImportantExcerpt<'a> {
 ```
 
 The name of the generic lifetime parameter is declared inside angle brackets after the name of the struct so we can use the lifetime parameter in the body of the struct definition.
+
+## Lifetime Elision
+
+TODO.
+
+## Lifetime Annotations in Method Definitions
+
+When implementing methods on a struct with lifetimes, we use the same syntax as that of generic type parameters.
+
+```rust
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 {
+        3
+    }
+}
+```
+
+## The Static Lifetime
+
+One special lifetime `'static`, which denotes that the affected reference can live for the `entire duration` of the program. 
+
+All string literals have the 'static lifetime, which we can annotate as follows:
+
+```rust
+let s: &'static str = "I have a static lifetime.";
+```
+
+The text of this string is stored directly in the `program’s binary`, which is always available. Therefore, the lifetime of all string literals is `'static`.
+
+> [!NOTE]  
+> Before specifying 'static as the lifetime for a reference, think about whether the reference you have actually lives the entire lifetime of your program or not, and whether you want it to. 
+
+## Generic Type Parameters, Trait Bounds, and Lifetimes Together
+
+Because lifetimes are a type of generic, the declarations of the lifetime parameter 'a and the generic type parameter T go in the same list inside the angle brackets after the function name.
+
+```rust
+use std::fmt::Display;
+
+fn longest_with_an_announcement<'a, T>(
+    x: &'a str,
+    y: &'a str,
+    ann: T,
+) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement! {}", ann);
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
