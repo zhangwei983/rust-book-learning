@@ -55,7 +55,90 @@ let handle = thread::spawn(move || {
 
 By telling Rust to `move` ownership of `v` to the spawned thread, we’re guaranteeing Rust that the current thread won’t use v anymore.
 
-## Message-passing Concurrency
+## Message-passing Between Threads
+
+Message passing means threads or actors communicate by sending each other messages containing data.
+
+A slogan from Go:
+
+```
+Do not communicate by sharing memory; instead, share memory by communicating.
+
+```
+
+Below is an example of using channel to pass message between threads.
+
+```rust
+use std::sync::mpsc;
+use std::thread;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from("hi");
+        tx.send(val).unwrap();
+    });
+
+    let received = rx.recv().unwrap();
+    println!("Got: {}", received);
+}
+```
+
+### Channel
+
+A `channel`:
+
+- is a general programming concept by which data is sent from one thread to another.
+- has two halves: a `transmitter` and a `receiver`.
+
+A channel is said to be `closed` if either the transmitter or receiver half is dropped.
+
+The above example shows how to create a new channel using the `mpsc::channel` function. 
+
+The `mpsc` stands for `multiple` producer, `single` consumer. The way Rust’s standard library implements channels means a channel can have `multiple` sending ends that produce values but only `one` receiving end that consumes those values.
+
+Here a `let` statement is used to extract the `tx` and `rx` of the tuple returned by mpsc::channel.
+
+### Sending messages
+
+```rust
+thread::spawn(move || {
+        let val = String::from("hi");
+        tx.send(val).unwrap();
+    });
+```
+
+This code snippet shows how to send message from a spawn thread.
+
+[!NOTE]  
+> The `send` function takes ownership of its parameter, and when the value is moved, the receiver takes ownership of it.
+
+### Receiving messages
+
+```rust
+tx.send(val).unwrap();
+```
+
+The receiver has two useful methods: 
+- `recv` which will block the main thread’s execution and wait until a value is sent down the channel.
+- and `try_recv`, which doesn’t block, but will instead return a `Result<T, E>` immediately.
+
+```rust
+for received in rx {
+        println!("Got: {}", received);
+    }
+```
+
+We can treat rx as an `iterator` instead of calling `recv` function. When the channel is closed, iteration will end.
+
+### Multiple Transmitters
+
+We can use clone to create more transmitters, like below
+
+```rust
+let tx1 = tx.clone();
+```
 
 ## Shared-state Concurrency
 
