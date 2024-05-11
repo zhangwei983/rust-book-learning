@@ -211,3 +211,11 @@ As marker traits, they don’t even have any methods to implement.
 Manually implementing these traits involves implementing `unsafe` Rust code. 
 
 ## Thread Local Variable
+
+The [std::thread::LocalKey](https://doc.rust-lang.org/std/thread/struct.LocalKey.html) is a thread local storage key which owns its contents. It is instantiated with the `thread_local!` macro and the primary method is the `with` method. And there are `helpers to make working with `Cell` types easier.
+
+The `std::thread_local` macro wraps any number of `static` declarations and makes them `thread local`. 
+
+Note that only `shared references` (&T) to the inner data may be obtained, so a type such as `Cell` or `RefCell` is typically used to allow `mutating` access.
+
+Check the [example](./src/thread_local.rs) to understand how to use `LocalKey` and `thread_local!`.

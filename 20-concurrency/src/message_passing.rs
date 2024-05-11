@@ -12,10 +12,12 @@ fn test_single_message(){
     });
 
     let received = rx.recv().unwrap();
-    println!("Got: {}", received);
+    println!("Main thread: {}", received);
 }
 
 fn test_multiple_messages(){
+    const SLEEP_DURATION_IN_MILLIS: u64 = 500;
+
     let (tx, rx) = mpsc::channel();
     let tx1 = tx.clone(); // Clone tx to have multiple transmitters.
 
@@ -29,7 +31,7 @@ fn test_multiple_messages(){
 
         for val in vals{
             tx.send(val).unwrap();
-            thread::sleep(Duration::from_millis(500));
+            thread::sleep(Duration::from_millis(SLEEP_DURATION_IN_MILLIS));
         }
     });
 
@@ -43,12 +45,12 @@ fn test_multiple_messages(){
 
         for val in vals{
             tx1.send(val).unwrap();
-            thread::sleep(Duration::from_millis(500));
+            thread::sleep(Duration::from_millis(SLEEP_DURATION_IN_MILLIS));
         }
     });
 
     for received in rx {
-        println!("Got: {}", received);
+        println!("Main thread: {}", received);
     }
 }
 
