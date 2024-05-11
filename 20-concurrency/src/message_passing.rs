@@ -29,7 +29,7 @@ fn test_multiple_messages(){
 
         for val in vals{
             tx.send(val).unwrap();
-            thread::sleep(Duration::from_secs(1));
+            thread::sleep(Duration::from_millis(500));
         }
     });
 
@@ -43,7 +43,7 @@ fn test_multiple_messages(){
 
         for val in vals{
             tx1.send(val).unwrap();
-            thread::sleep(Duration::from_secs(1));
+            thread::sleep(Duration::from_millis(500));
         }
     });
 

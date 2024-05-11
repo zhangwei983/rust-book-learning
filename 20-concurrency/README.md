@@ -63,7 +63,6 @@ A slogan from Go:
 
 ```
 Do not communicate by sharing memory; instead, share memory by communicating.
-
 ```
 
 Below is an example of using channel to pass message between threads.
@@ -104,9 +103,9 @@ Here a `let` statement is used to extract the `tx` and `rx` of the tuple returne
 
 ```rust
 thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-    });
+    let val = String::from("hi");
+    tx.send(val).unwrap();
+});
 ```
 
 This code snippet shows how to send message from a spawn thread.
@@ -126,8 +125,8 @@ The receiver has two useful methods:
 
 ```rust
 for received in rx {
-        println!("Got: {}", received);
-    }
+    println!("Got: {}", received);
+}
 ```
 
 We can treat rx as an `iterator` instead of calling `recv` function. When the channel is closed, iteration will end.
@@ -142,6 +141,73 @@ let tx1 = tx.clone();
 
 ## Shared-state Concurrency
 
+Shared memory concurrency is like `multiple` ownership: multiple threads can access the same memory location at the same time.
+
+### Mutex
+
+`Mutex` is an abbreviation for `mutual exclusion`, as in, a mutex allows `only one` thread to access some data at any given time.
+
+The `lock` is a data structure that is part of the mutex that keeps track of who currently has `exclusive` access to the data.
+
+Mutexes have a reputation for being difficult to use:
+- You must attempt to acquire the lock before using the data.
+- When you’re done with the data that the mutex guards, you must unlock the data so other threads can acquire the lock.
+
+```rust
+let m = Mutex::new(5);
+
+{
+    let mut num = m.lock().unwrap();
+    *num = 6;
+}
+```
+
+This example shows: 
+- creating a `Mutex<T>` using the associated function `new`.
+- using the `lock` method to acquire the lock to access the data inside the mutex.
+- the call to `lock` returns a smart pointer called `MutexGuard`.
+- so we can treat the return value as a `mutable reference` to the data inside.
+
+[!NOTE]
+`Mutex<T>` provides `interior mutability` as the `Cell` family does.
+
+The `MutexGuard` smart pointer implements 
+- `Deref` trait to point at our inner data.
+- `Drop` trait that releases the lock automatically when a MutexGuard goes out of scope,
+
+### Sharing a Mutex<T> Between Multiple Threads
+
+As we discussed before, `Rc<T>` support multiple ownership by creating a reference counted value, but it can only be used in `single-threaded` scenarios.
+
+So we use `Atomic Reference Counting` with `Arc<T>` in this concurrent situations. You need to know that `atomics` work like `primitive` types but are safe to share across threads.
+
+Check [this sample](./src/shared_state.rs) for how to use `Arc<T>`.
+
 ## The Sync and Send Traits
+
+Interestingly, the Rust language has very few concurrency features.  Almost every concurrency feature we’ve talked about so far has been part of the standard library, not the language.
+
+However, two concurrency concepts are embedded in the language: the std::marker traits Sync and Send.
+
+### Send Trait
+
+The `Send` marker trait indicates that ownership of values of the type implementing `Send` can be transferred between threads. 
+
+- Almost every Rust type is `Send`, but there are some exceptions, including `Rc<T>`.
+- Almost all primitive types are `Send`, aside from `raw` pointers, which we’ll discuss later.
+- Any type `composed` entirely of `Send` types is `automatically` marked as `Send`.
+
+### Sycn Trait
+
+The `Sync` marker trait indicates that it is safe for the type implementing `Sync` to be referenced from multiple threads.
+
+Any type T is Sync if `&T` (an immutable reference to T) is `Send`, meaning the reference can be sent safely to another thread.
+
+
+### Implementing Send and Sync Manually Is `Unsafe`.
+
+As marker traits, they don’t even have any methods to implement. 
+
+Manually implementing these traits involves implementing `unsafe` Rust code. 
 
 ## Thread Local Variable
