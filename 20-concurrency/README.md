@@ -110,7 +110,7 @@ thread::spawn(move || {
 
 This code snippet shows how to send message from a spawn thread.
 
-[!NOTE]  
+> [!NOTE]  
 > The `send` function takes ownership of its parameter, and when the value is moved, the receiver takes ownership of it.
 
 ### Receiving messages
@@ -168,8 +168,8 @@ This example shows:
 - the call to `lock` returns a smart pointer called `MutexGuard`.
 - so we can treat the return value as a `mutable reference` to the data inside.
 
-[!NOTE]
-`Mutex<T>` provides `interior mutability` as the `Cell` family does.
+> [!NOTE]
+> `Mutex<T>` provides `interior mutability` as the `Cell` family does.
 
 The `MutexGuard` smart pointer implements 
 - `Deref` trait to point at our inner data.
