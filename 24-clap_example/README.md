@@ -18,7 +18,7 @@ And for how to use `derive`, please check [this document](https://docs.rs/clap/4
 
 ### Using clap Parser
 
-Please check [this code](./src/main.rs) as an example.
+[Here](./src/commands.rs) is an example of using clap to build a simple command line tool.
 
 And you can run below command to see how to use this command line example.
 
@@ -28,12 +28,8 @@ cargo run -- -h
 
 With `--`, you can pass arguments to the command line tool rather than `cargo run` itself.
 
+So we can use the cli we build as
 
-### An Example
-
-[Here](./src/commands.rs) is an example of using clap to build a simple command line tool.
-
-You can run 
 ```bash
 cargo run -- greet --name World --count 5
 ```
