@@ -12,9 +12,9 @@ You can run
 cargo add clap --features derive
 ```
 
-to add clap dependency to the cargo.toml file in your project.
+to add clap dependency to the cargo.toml file in your project. Please check this [cargo.toml](Cargo.toml) as an example.
 
-Please check this [cargo.toml](Cargo.toml) as an example.
+And for how to use `derive`, please check [this document](https://docs.rs/clap/4.0.18/clap/_derive/_tutorial/index.html#).
 
 ### Using clap Parser
 
@@ -27,3 +27,15 @@ cargo run -- -h
 ```
 
 With `--`, you can pass arguments to the command line tool rather than `cargo run` itself.
+
+
+### An Example
+
+[Here](./src/commands.rs) is an example of using clap to build a simple command line tool.
+
+You can run 
+```bash
+cargo run -- greet --name World --count 5
+```
+
+to greet to the name `World` for `5` times.
