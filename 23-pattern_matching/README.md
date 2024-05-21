@@ -91,12 +91,11 @@ The `let` statements are irrefutable. For example, `let x =5`, `x` matches anyth
 
 ### Refutable
 
-Patterns that can fail to match for some possible value are refutable. 
+Patterns that can fail to match for some possible value are `refutable`. 
 
 For example, `if let Some(x) = a_value`, `Some(x)` is refutable as the value in the `a_value` variable might be `None`.
 
 The `if let` and `while let` expressions accept `refutable` and `irrefutable` patterns, but the compiler warns against irrefutable patterns.
-
 
 ## Pattern Syntax
 
@@ -195,22 +194,21 @@ match num {
 
 The above match has its first arm with the pattern `Some(x)` and also a `match guard` of `if x % 2 == 0`.
 
-
 ### Match Bindings
 
 Use the `at` operator `@` to create a variable that holds a value at the same time as we’re testing that value for a pattern match.
 
 ```rust
 enum Message {
-        Hello { id: i32 },
-    }
+    Hello { id: i32 },
+}
 
-    let msg = Message::Hello { id: 5 };
+let msg = Message::Hello { id: 5 };
 
-    match msg {
-        Message::Hello {
-            id: id_variable @ 3..=7,
-        } => println!("Found an id in range: {}", id_variable),
-        Message::Hello { id } => println!("Found some other id: {}", id),
-    }
+match msg {
+    Message::Hello {
+        id: id_variable @ 3..=7,
+    } => println!("Found an id in range: {}", id_variable),
+    Message::Hello { id } => println!("Found some other id: {}", id),
+}
 ```
