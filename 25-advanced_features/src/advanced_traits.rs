@@ -129,7 +129,7 @@ impl fmt::Display for Point1 {
     }
 }
 
-// New type to implement the external `fmt::Display` trait on the external type `Vec<String>`.
+// Newtype pattern to implement the external `fmt::Display` trait on the external type `Vec<T>`.
 struct Wrapper(Vec<String>);
 
 impl fmt::Display for Wrapper {

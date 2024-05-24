@@ -210,3 +210,99 @@ impl fmt::Display for Point {
 ```
 
 In the above example, we define an `OutlinePrint` trait that depends on `fmt::Dispaly` trait. Then the compiler will ask you to implement `fmt::Display` for `Point` if you forget.
+
+### Newtype Pattern
+
+It’s possible to get around the `orphan rule` (it's only allowed to implement a trait on a type if either the trait or the type are local to our crate. ) restriction using the `newtype` pattern.
+
+The newtype pattern 
+- involves creating a new type in a tuple struct with `one` field.
+- is a thin wrapper around the type we want to implement a trait for.
+- is a term that originates from the `Haskell` programming language.
+
+There is no runtime performance penalty for using the newtype pattern, and the wrapper type is elided at compile time.
+
+```rust
+use std::fmt;
+
+struct Wrapper(Vec<String>);
+
+impl fmt::Display for Wrapper {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[{}]", self.0.join(", "))
+    }
+}
+```
+
+## Advanced Types
+
+### Newtype Pattern
+
+Newtype pattern can:
+
+- statically enforce values are never confused and indicate the units of a value.
+- abstract away some implementation details of a type: the new type can expose a public API that is different from the API of the private inner type.
+- also hide internal implementation.
+
+### Type Aliases
+
+Rust provides the ability to declare a `type alias` to give an existing type another name. The main use case for type `synonyms` is to reduce `repetition`. 
+
+```rust
+type Kilometers = i32;
+```
+
+The above example creates the alias `Kilometers` to `i32`.
+
+### Never Type
+
+Rust has a special type named `!` that’s known in type theory lingo as the `empty type` because it has no values. We prefer to call it the `never type` because it stands in the place of the return type when a function will `never` return. 
+
+```rust
+fn bar() -> ! {
+    // --snip--
+}
+```
+
+The above code is read as `the function bar returns never.` Functions that return never are called `diverging functions`. 
+
+Below is several usage of the never type.
+
+#### continue 
+
+[Here](./../03-guessing_game/src/main.rs#L25) is an example of never type.
+
+The `continue` has a `!` value. The type of `guess` is decided as `u32`.
+
+#### panic!
+
+Another is `panic!` macro.
+
+```rust
+impl<T> Option<T> {
+    pub fn unwrap(self) -> T {
+        match self {
+            Some(val) => val,
+            None => panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}
+```
+
+This code works because `panic!` doesn’t produce a value; it ends the program. In the `None` case, we won’t be returning a value from `unwrap`, so this code is valid.
+
+#### loop
+
+One final expression that has the type `!` is a `loop`.
+
+```rust
+print!("forever ");
+
+loop {
+    print!("and ever ");
+}
+```
+
+Here, the `loop` never ends, so `!` is the value of the expression. However, this wouldn’t be true if we included a `break`, because the `loop` would terminate when it got to the `break`.
+
+

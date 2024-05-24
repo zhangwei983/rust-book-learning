@@ -1,6 +1,5 @@
 use std::slice;
 
-
 // Define an unsafe function.
 unsafe fn dangerous() {}
 
