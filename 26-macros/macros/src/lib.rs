@@ -30,3 +30,7 @@ macro_rules! caculate {
         }
     };
 }
+
+pub trait HelloMacro {
+    fn hello_macro();
+}
