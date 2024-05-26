@@ -54,9 +54,20 @@ The above is an example of defining a declarative mccro with `macro_rules!`.
 - The macro is defined without the `exclamation` mark.
 - The structure in the macro body is similar to the structure of a `match` expression.
 
+### Procedural Macros
+
+The `procedural macro` acts more like a function (and is a type of procedure).
+
+Procedural macros:
+- accept some code as an input,
+- operate on that code,
+- and produce some code as an output.
+
+When creating `procedural macros`, the definitions must reside in their own crate with a special crate type.
+
 ### Write a Custom derive Macro
 
-We want to achieve something like below, with `HelloMacro` defined as a derive Macro. 
+We want to achieve something like below, with `HelloMacro` defined as a `derive Macro`. 
 
 ```rust
 use hello_macro::HelloMacro;
@@ -76,7 +87,10 @@ The convention for structuring crates and macro crates is as follows:
 - for a crate named `macros`, 
 - a custom derive procedural macro crate is called `macros_derive`. 
 
-#### For macros_derive
+And `derive` only works for `structs` and `enums`.
+
+#### For `macros_derive` Crate
+
 And for `macros_derive`, you need to add following content to the `Cargo.toml` file:
 
 ```
@@ -92,10 +106,51 @@ For `proc-macro`, it indicates the library is a procedure macro crate. Please ch
 
 For the macro definition itself, please refer to the [lib.rs](./macros_derive/src/lib.rs) file.
 
-#### For macros
+#### For `macros` Crate
 
 In `macros` crate, we need to
 - add `macros_derive` as a dependency, please refer to [here](./macros/Cargo.toml#L9).
 - Define a trait with the same name as the procedure macro, please check [here](./macros/src/lib.rs#L35).
 
 These two crates are tightly related. If you change the [trait definition](./macros/src/lib.rs#L35) in `macros`, you have to change the [implementation](./macros_derive/src/lib.rs#L6) of the procedural macro in `macros_derive` as well. 
+
+### Attribute-like Macros
+
+Attribute-like macros are similar to custom derive macros, but instead of generating code for the derive attribute, they allow you to create new attributes.
+
+Attributes can be applied to items other than structs and enums, such as functions.
+
+Below is an example of an attribute.
+
+```rust
+#[route(GET, "/")]
+fn index() {
+```
+
+This #[route] attribute would be defined by the framework as a procedural macro as below.
+
+```rust
+#[proc_macro_attribute]
+pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
+```
+
+There are two `TokenStream` parameters:
+- The first is for the contents of the `attribute`: the `GET, "/"` part. 
+- The second is the `body` of the item the attribute is attached to: in this case, fn index() {} and the rest of the function’s body.
+
+### Function-like Macros
+
+Function-like macros define macros that look like function calls.
+
+```rust
+let sql = sql!(SELECT * FROM posts WHERE id=1);
+```
+
+The `sql!` macro would be defined like this:
+
+```rust
+#[proc_macro]
+pub fn sql(input: TokenStream) -> TokenStream {
+```
+
+The `sql!` macro can parse the SQL statement inside it and check that it’s syntactically correct, which is much more complex processing than a `macro_rules!`.
