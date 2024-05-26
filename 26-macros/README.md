@@ -154,3 +154,65 @@ pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
 The `sql!` macro can parse the SQL statement inside it and check that it’s syntactically correct, which is much more complex processing than a `macro_rules!`.
+
+### cargo-expand
+
+The [cargo-expand](https://lib.rs/crates/cargo-expand) is a library that can show the result of macro expansion.
+
+Please run the below command to install:
+
+```bash
+cargo install cargo-expand
+```
+
+For below code, 
+
+```rust
+#[derive(Debug)]
+struct S;
+
+fn main() {
+    println!("{:?}", S);
+}
+```
+
+If you run
+
+```bash
+cargo expand
+```
+
+you will get
+
+```rust
+#![feature(prelude_import)]
+#[prelude_import]
+use std::prelude::v1::*;
+#[macro_use]
+extern crate std;
+struct S;
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl ::core::fmt::Debug for S {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+        match *self {
+            S => {
+                let mut debug_trait_builder = f.debug_tuple("S");
+                debug_trait_builder.finish()
+            }
+        }
+    }
+}
+fn main() {
+    {
+        ::std::io::_print(::core::fmt::Arguments::new_v1(
+            &["", "\n"],
+            &match (&S,) {
+                (arg0,) => [::core::fmt::ArgumentV1::new(arg0, ::core::fmt::Debug::fmt)],
+            },
+        ));
+    };
+}
+```
+
+Run `cargo expand --help` to check more details.
