@@ -31,6 +31,7 @@ macro_rules! caculate {
     };
 }
 
+// Derive macro.
 pub trait HelloMacro {
     fn hello_macro();
 }
