@@ -9,23 +9,21 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(4) {
         let stream = stream.unwrap();
 
         pool.execute(|| {
             handle_connection(stream)
         });
-
-        // Spawn a new thread to handle the request.
-        // thread::spawn(|| {
-        //     handle_connection(stream);
-        // });
     }
+
+    println!("Shutting down.");
 }
 
 fn handle_connection(mut stream: TcpStream) {
     let buf_reader = BufReader::new(&mut stream);
     
+    // For debugging the incoming http request
     // let _http_request: Vec<_> = buf_reader
     //     .lines()
     //     .map(|result| result.unwrap())
@@ -33,8 +31,6 @@ fn handle_connection(mut stream: TcpStream) {
     //     .collect();
 
     // println!("Request: {:#?}", _http_request);
-
-    // let response = "HTTP/1.1 200 OK\r\n\r\n";
 
     let request_line = buf_reader
         .lines()
