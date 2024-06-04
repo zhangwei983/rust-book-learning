@@ -212,7 +212,7 @@ Manually implementing these traits involves implementing `unsafe` Rust code.
 
 ## Thread Local Variable
 
-The [std::thread::LocalKey](https://doc.rust-lang.org/std/thread/struct.LocalKey.html) is a thread local storage key which owns its contents. It is instantiated with the `thread_local!` macro and the primary method is the `with` method. And there are `helpers to make working with `Cell` types easier.
+The [std::thread::LocalKey](https://doc.rust-lang.org/std/thread/struct.LocalKey.html) is a thread local storage key which owns its contents. It is instantiated with the `thread_local!` macro and the primary method is the `with` method. And there are helpers to make working with `Cell` types easier.
 
 The `std::thread_local` macro wraps any number of `static` declarations and makes them `thread local`. 
 
