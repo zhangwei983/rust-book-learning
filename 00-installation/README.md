@@ -24,6 +24,10 @@ On Linux, you generally install `GCC` or `Clang`, according to their distributio
 
 I'm on `WSL2 with Ubuntu`, so I installed the `build-essential` package.
 
+```bash
+sudo apt install build-essential
+```
+
 ## On Windows
 
 On Windows, go to https://www.rust-lang.org/tools/install and follow the instructions for installing Rust. 
