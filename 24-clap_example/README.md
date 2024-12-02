@@ -35,3 +35,27 @@ cargo run -- greet --name World --count 5
 ```
 
 to greet to the name `World` for `5` times.
+
+### Environment variables
+
+You can read arguments from the environment variables, like below:
+
+```rust
+#[arg(long, env = "TEST_ENVIRONMENT_VARIABLE", hide = true)]
+env_variable_set: bool,
+```
+
+Please google around to find the ways to set environment on different platforms.
+
+For me, I'm working on Windows with Powershell.
+
+Setting
+```bash
+$env:TEST_ENVIRONMENT_VARIABLE="true"
+```
+
+Checking:
+
+```bash
+ls env:
+```

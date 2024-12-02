@@ -26,6 +26,10 @@ pub struct GreetOpts {
     #[arg(short, long, default_value_t = 1)]
     // With default value `1`.
     count: u32,
+
+    // Argument that is read from the environment variable, which will be hidden from the command line.
+    #[arg(long, env = "TEST_ENVIRONMENT_VARIABLE", hide = true)]
+    env_variable_set: bool,
 }
 
 #[derive(Subcommand)]
@@ -39,6 +43,7 @@ pub fn exec_command(cmd: Command) {
         Command::Greet(opts) => {
             for _ in 0..opts.count {
                 println!("Hello {}.", opts.name);
+                println!("{}", opts.env_variable_set);
             }
         }
     }
