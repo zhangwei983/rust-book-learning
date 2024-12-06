@@ -50,7 +50,7 @@ pub fn test() {
     let serialized_message = serde_json::to_string(&message).unwrap();
     println!("Serialized message: {}", serialized_message);
 
-    let deserialized_message : Message = serde_json::from_str(&serialized_message).unwrap();
+    let deserialized_message: Message = serde_json::from_str(&serialized_message).unwrap();
     println!("Deserialized message: {:?}", deserialized_message);
 
     println!("--- End module: {}", module_path!());
