@@ -1,6 +1,7 @@
 mod attributes;
 mod basic;
 mod default_values;
+mod flattern;
 
 fn main() {
     basic::test();
@@ -8,4 +9,6 @@ fn main() {
     attributes::test();
     println!("");
     default_values::test();
+    println!("");
+    flattern::test();
 }
