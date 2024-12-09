@@ -1,6 +1,7 @@
 mod attributes;
 mod basic;
-mod custom_serialization;
+mod custom_deserialize;
+mod custom_serialize;
 mod default_values;
 mod flattern;
 
@@ -13,5 +14,7 @@ fn main() {
     println!("");
     flattern::test();
     println!("");
-    custom_serialization::test();
+    custom_serialize::test();
+    println!("");
+    custom_deserialize::test();
 }

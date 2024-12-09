@@ -28,7 +28,7 @@ impl Default for Timeout {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, PartialEq, Eq)]
 enum Priority {
     ExtraHigh,
     High,
@@ -61,6 +61,15 @@ pub fn test() {
     "#;
 
     let requests: Vec<Request> = serde_json::from_str(json_string).unwrap();
+
+    assert_eq!(requests[0].resource, "/users");
+    assert_eq!(requests[0].timeout.0, 30);
+    assert_eq!(requests[0].priority, Priority::ExtraLow);
+
+    assert_eq!(requests[1].resource, "/");
+    assert_eq!(requests[1].timeout.0, 5);
+    assert_eq!(requests[1].priority, Priority::High);
+
     println!("Request 0 : {:?}", requests[0]);
     println!("Request 1 : {:?}", requests[1]);
 
