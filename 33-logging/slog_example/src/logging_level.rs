@@ -1,6 +1,10 @@
 use chrono::Utc;
 use slog::{self, debug, info, trace, Drain};
-use std::sync::{atomic, Arc};
+use std::{
+    sync::{atomic, Arc},
+    thread,
+    time::Duration,
+};
 
 struct RuntimeLevelFilter<D> {
     drain: D,
@@ -56,6 +60,7 @@ pub fn test() {
 
     info!(root_logger, "--- Start module: {}", module_path!());
     trace!(root_logger, "Module started"; "started_at" => format!("{}", Utc::now()));
+    thread::sleep(Duration::new(1, 0));
     debug!(root_logger, "Module ended"; "ended_at" => format!("{}", Utc::now()));
     info!(root_logger, "--- End module: {}", module_path!());
 }
