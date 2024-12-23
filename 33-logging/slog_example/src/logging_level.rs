@@ -47,16 +47,11 @@ pub fn test() {
 
     let root_logger = slog::Logger::root(drain, slog::o!());
 
-    info!(root_logger, "--- Start module: {}", module_path!());
-
-    debug!(root_logger, "Module started";
-        "started_at" => format!("{}", Utc::now()));
-
-    // Enable Debug log level.
+    // Switch to Debug log level.
     on.store(true, atomic::Ordering::Relaxed);
 
-    debug!(root_logger, "Module ended";
-        "ended_at" => format!("{}", Utc::now()));
-
+    info!(root_logger, "--- Start module: {}", module_path!());
+    debug!(root_logger, "Module started"; "started_at" => format!("{}", Utc::now()));
+    debug!(root_logger, "Module ended"; "ended_at" => format!("{}", Utc::now()));
     info!(root_logger, "--- End module: {}", module_path!());
 }

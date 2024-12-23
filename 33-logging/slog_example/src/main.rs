@@ -1,4 +1,5 @@
 mod log_to_file;
+mod log_to_multiple_drains;
 mod log_to_terminal;
 mod logging_level;
 
@@ -8,4 +9,6 @@ fn main() {
     logging_level::test();
     println!("");
     log_to_file::test();
+    println!("");
+    log_to_multiple_drains::test();
 }
