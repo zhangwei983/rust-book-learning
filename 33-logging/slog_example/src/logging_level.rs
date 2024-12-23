@@ -1,5 +1,5 @@
 use chrono::Utc;
-use slog::{self, debug, info, Drain};
+use slog::{self, debug, info, trace, Drain};
 use std::sync::{atomic, Arc};
 
 struct RuntimeLevelFilter<D> {
@@ -20,7 +20,11 @@ where
         values: &slog::OwnedKVList,
     ) -> std::result::Result<Self::Ok, Self::Err> {
         let current_level = if self.on.load(atomic::Ordering::Relaxed) {
-            slog::Level::Debug
+            // Enable `max_level_trace` feature of slog.
+            // Slog by default removes
+            // 1. trace and debug level statements in release builds,
+            // 2. and trace level records in debug builds.
+            slog::Level::Trace
         } else {
             slog::Level::Info
         };
@@ -51,7 +55,7 @@ pub fn test() {
     on.store(true, atomic::Ordering::Relaxed);
 
     info!(root_logger, "--- Start module: {}", module_path!());
-    debug!(root_logger, "Module started"; "started_at" => format!("{}", Utc::now()));
+    trace!(root_logger, "Module started"; "started_at" => format!("{}", Utc::now()));
     debug!(root_logger, "Module ended"; "ended_at" => format!("{}", Utc::now()));
     info!(root_logger, "--- End module: {}", module_path!());
 }
