@@ -28,6 +28,7 @@ pub fn test() {
         .root()
         .ok_or("can't get the merkle root.")
         .unwrap();
+    // println!("Merkle tree root: {:x?}", merkle_root);
     let leaves_to_prove = leaves
         .get(3..5)
         .ok_or("can't get leaves to prove.")
