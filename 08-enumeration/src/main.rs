@@ -62,6 +62,11 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
     }
 }
 
+struct MessageWrapper {
+    pub message : Message,
+    pub set : bool,
+}
+
 fn main() {
     let four = IpAddrKind::V4;
     let six = IpAddrKind::V6;
@@ -79,11 +84,11 @@ fn main() {
 
     // Option Usage.
     let some_number = Some(5);
-    let some_char = Some('e');
+    let _some_char = Some('e');
 
-    let absent_number: Option<i32> = None;
+    let _absent_number: Option<i32> = None;
 
-    let x = 5;
+    let _x = 5;
     // let sum = x + some_number; // This won't compile as Option<i32> and i32 are different types.
 
     // Match usage.
@@ -115,5 +120,26 @@ fn main() {
 
     if let Some(max) = config_max {
         println!("The maximum is configured to be {}", max);
+    }
+
+    let message_wrapper = MessageWrapper {
+        message : Message::Move {x : 1, y : 2},
+        set : true,
+    };
+
+    match message_wrapper {
+        MessageWrapper {
+            message : Message::Move { x, y },
+            ..
+        } => {
+            println!("Move to: ({} {})", x, y);
+        },
+        MessageWrapper { set, .. } => {
+            println!("{}", set);
+        }
+    }
+
+    if let MessageWrapper { message : Message::Move { x, y }, ..} = message_wrapper {
+        println!("Move to x: {}, y: {}", x , y)
     }
 }
