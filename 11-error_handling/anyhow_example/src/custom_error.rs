@@ -48,8 +48,8 @@ fn from_fn_error_context() -> Result<()> {
     .with_context(|| "More context added to the error.")
 }
 
-#[context("More context from from_more_context")]
-fn from_more_context() -> Result<()> {
+#[context("More context from from_more_context: {}", if test { "is true" } else { "is flase" })]
+fn from_more_context(test: bool) -> Result<()> {
     from_fn_error_context()
 }
 
@@ -69,7 +69,7 @@ pub fn test() {
 
     println!("");
 
-    match from_more_context() {
+    match from_more_context(true) {
         Ok(_) => (),
         Err(err) => println!("{:?}", err),
     }
