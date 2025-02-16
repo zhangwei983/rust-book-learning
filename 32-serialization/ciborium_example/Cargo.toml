@@ -1,0 +1,8 @@
+[package]
+name = "ciborium_example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ciborium = "0.2.2"
+serde = "1.0.217"
