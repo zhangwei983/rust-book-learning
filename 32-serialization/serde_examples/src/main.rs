@@ -1,5 +1,6 @@
 mod attributes;
 mod basic;
+mod cbor;
 mod custom_deserialize;
 mod custom_serialize;
 mod default_values;
@@ -20,4 +21,6 @@ fn main() {
     custom_deserialize::test();
     println!("");
     process_array::test();
+    println!("");
+    cbor::test();
 }
