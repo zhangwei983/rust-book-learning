@@ -37,4 +37,6 @@ pub fn test() {
     let result: Mascot = serde_cbor::from_slice(&bytes2).unwrap();
     assert_eq!(ferris, result);
     println!("Deserialized mascot: {:?}", result);
+
+    println!("--- End module: {}", module_path!());
 }

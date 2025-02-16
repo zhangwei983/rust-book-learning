@@ -1,6 +1,7 @@
 mod attributes;
 mod basic;
 mod cbor;
+mod ciborium_lib;
 mod custom_deserialize;
 mod custom_serialize;
 mod default_values;
@@ -23,4 +24,6 @@ fn main() {
     process_array::test();
     println!("");
     cbor::test();
+    println!("");
+    ciborium_lib::test();
 }

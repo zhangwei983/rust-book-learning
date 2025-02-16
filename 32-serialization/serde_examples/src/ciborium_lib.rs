@@ -7,7 +7,9 @@ struct Point {
     y: i32,
 }
 
-fn main() {
+pub fn test() {
+    println!("--- Start module: {}", module_path!());
+
     let point = Point { x: 10, y: 20 };
 
     let file = File::create("point.cbor").unwrap();
@@ -24,4 +26,6 @@ fn main() {
     let result: Point = ciborium::de::from_reader(bytes.as_slice()).unwrap();
     assert_eq!(point, result);
     println!("{:?}", result);
+
+    println!("--- End module: {}", module_path!());
 }
