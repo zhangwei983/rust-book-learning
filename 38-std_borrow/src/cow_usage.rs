@@ -1,9 +1,24 @@
 use std::borrow::Cow;
 
-fn is_borrowed(input: &Cow<'_, [i32]>) -> bool {
-    match input {
-        Cow::Borrowed(_) => true,
-        Cow::Owned(_) => false,
+trait IsBorrowed {
+    fn my_is_borrowed(&self) -> bool;
+}
+
+impl IsBorrowed for Cow<'_, [i32]> {
+    fn my_is_borrowed(&self) -> bool {
+        match self {
+            Cow::Borrowed(_) => true,
+            Cow::Owned(_) => false,
+        }
+    }
+}
+
+impl IsBorrowed for Cow<'_, str> {
+    fn my_is_borrowed(&self) -> bool {
+        match self {
+            Cow::Borrowed(_) => true,
+            Cow::Owned(_) => false,
+        }
     }
 }
 
@@ -30,28 +45,25 @@ pub fn test() {
 
     let slice = [1, 2, 3];
     let mut input = Cow::from(&slice[..]);
-    println!("First: {}", is_borrowed(&input));
+    println!("First: {}", input.my_is_borrowed());
     abs_all(&mut input);
-    println!("First: {}", is_borrowed(&input));
+    println!("First: {}", input.my_is_borrowed());
 
     // Clone occurs because `input` needs to be mutated.
     let slice = [-1, 0, 1];
     let mut input = Cow::from(&slice[..]);
-    println!("Second: {}", is_borrowed(&input));
+    println!("Second: {}", input.my_is_borrowed());
     abs_all(&mut input);
-    println!("Second: {}", is_borrowed(&input));
+    println!("Second: {}", input.my_is_borrowed());
 
     // No clone occurs because `input` is already owned.
     let mut input = Cow::from(vec![-1, 0, 1]);
-    println!("Third: {}", is_borrowed(&input));
+    println!("Third: {}", input.my_is_borrowed());
     abs_all(&mut input);
-    println!("Third: {}", is_borrowed(&input));
+    println!("Third: {}", input.my_is_borrowed());
 
     for number in 1..=6 {
-        match modulo_3(number) {
-            Cow::Borrowed(msg) => println!("{} : The Cow is borrowed with : {}", number, msg),
-            Cow::Owned(msg) => println!("{} : The Cow is owned with : {}", number, msg),
-        }
+        println!("{} : {}", number, modulo_3(number).my_is_borrowed());
     }
 
     println!("--- End module: {}", module_path!());
