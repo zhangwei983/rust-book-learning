@@ -1,8 +1,0 @@
-[package]
-name = "wasmtime_sample"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-wasi-common = "26.0.1"
-wasmtime = "26.0.1"
