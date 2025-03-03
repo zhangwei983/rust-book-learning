@@ -7,7 +7,7 @@ pub fn test() {
     let engine = Engine::default();
 
     // A `Module` which represents a compiled form of our input wasm module.
-    let module = Module::from_file(&engine, "wasms/hello.wat").unwrap();
+    let module = Module::from_file(&engine, "wasms/answer.wat").unwrap();
 
     // All wasm items are stored within a `Store`, and it's what we'll always be using to
     // interact with the wasm world.
