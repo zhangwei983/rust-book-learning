@@ -16,4 +16,6 @@ fn main() {
     wasm_component::test();
     println!("");
     wasm_component::test1();
+    println!("");
+    wasm_component::test2();
 }

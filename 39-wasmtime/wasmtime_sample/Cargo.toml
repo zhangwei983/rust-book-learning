@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tokio = "1.43.0"
 wasi-common = "30.0.2"
-wasmtime = "30.0.2"
+wasmtime = { version = "30.0.2", features = ["async"] }
 wasmtime-wasi = "30.0.2"

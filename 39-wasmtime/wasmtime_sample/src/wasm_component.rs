@@ -1,6 +1,7 @@
 use wasmtime::component::{Component, Linker, ResourceTable};
 use wasmtime::*;
 use wasmtime_wasi::bindings::sync::Command;
+use wasmtime_wasi::bindings::Command as Async_Command;
 use wasmtime_wasi::{IoView, WasiCtx, WasiCtxBuilder, WasiView};
 
 pub struct ComponentRunStates {
@@ -21,7 +22,7 @@ impl WasiView for ComponentRunStates {
 }
 
 pub fn test() {
-    println!("--- Start module 0: {}", module_path!());
+    println!("--- Start module: {} 0", module_path!());
 
     let engine = Engine::default();
     let mut linker = Linker::new(&engine);
@@ -45,11 +46,11 @@ pub fn test() {
         std::process::exit(1);
     }
 
-    println!("--- End module 0: {}", module_path!());
+    println!("--- End module: {} 0", module_path!());
 }
 
 pub fn test1() {
-    println!("--- Start module 1: {}", module_path!());
+    println!("--- Start module: {} 1", module_path!());
 
     let engine = Engine::default();
     let mut linker = Linker::new(&engine);
@@ -88,5 +89,45 @@ pub fn test1() {
     let (_result,) = func.call(&mut store, ()).unwrap();
     func.post_return(&mut store).unwrap();
 
-    println!("--- End module 1: {}", module_path!());
+    println!("--- End module: {} 1", module_path!());
+}
+
+async fn async_test() -> Result<(), ()> {
+    // Configure the engine to support async.
+    let mut config = Config::new();
+    config.async_support(true);
+    let engine = Engine::new(&config).unwrap();
+
+    let mut linker = Linker::new(&engine);
+    wasmtime_wasi::add_to_linker_async(&mut linker).unwrap();
+
+    // Create a WASI context and store in the Store.
+    let wasi = WasiCtxBuilder::new().inherit_stdio().inherit_args().build();
+    let state = ComponentRunStates {
+        wasi_ctx: wasi,
+        resource_table: ResourceTable::new(),
+    };
+    let mut store = Store::new(&engine, state);
+
+    // Instantiate the WASM component as an async Command to run a wasi:cli command.
+    let component = Component::from_file(&engine, "wasms/wasm_component.wasm").unwrap();
+    let instance = Async_Command::instantiate_async(&mut store, &component, &linker)
+        .await
+        .unwrap();
+
+    // Run the program.
+    instance.wasi_cli_run().call_run(&mut store).await.unwrap()
+}
+
+pub fn test2() {
+    println!("--- Start module: {} 2", module_path!());
+
+    // Create a tokio runtime to run the async test.
+    let runtime = tokio::runtime::Runtime::new().unwrap();
+    let result = runtime.block_on(async_test());
+    if result.is_err() {
+        std::process::exit(1);
+    }
+
+    println!("--- End module: {} 2", module_path!());
 }
