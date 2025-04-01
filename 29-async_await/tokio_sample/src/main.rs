@@ -11,4 +11,5 @@ mod hello_world;
 #[tokio::main]
 async fn main() {
     hello_world::test().await;
+    println!("");
 }
