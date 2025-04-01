@@ -1,4 +1,9 @@
-mod hello_world;
+mod basic_usage;
+mod file;
+mod join;
+mod select;
+mod spawn;
+mod tcp;
 
 // The #[tokio::main] macro transforms the async fn main() into a synchronous fn main()
 // that initializes a runtime instance and executes the async main function.
@@ -10,6 +15,15 @@ mod hello_world;
 // }
 #[tokio::main]
 async fn main() {
-    hello_world::test().await;
+    basic_usage::test().await;
     println!("");
+    join::test().await;
+    println!("");
+    spawn::test().await;
+    println!("");
+    select::test().await;
+    println!("");
+    file::test().await.unwrap();
+    println!("");
+    tcp::test().await.unwrap();
 }
