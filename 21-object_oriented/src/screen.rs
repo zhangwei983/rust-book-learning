@@ -17,6 +17,8 @@ impl Draw for SelectBox {
 }
 
 pub fn test() {
+    println!("--- Start module: {}", module_path!());
+
     let screen = Screen {
         components: vec![
             Box::new(SelectBox {
@@ -37,4 +39,6 @@ pub fn test() {
     };
 
     screen.run();
+
+    println!("--- End module: {}", module_path!());
 }
