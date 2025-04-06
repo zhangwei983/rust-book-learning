@@ -10,7 +10,10 @@ pub struct Button {
 
 impl Draw for Button {
     fn draw(&self) {
-        println!("Draw Button: width {}, height {}, label {}", self.width, self.height, self.label);
+        println!(
+            "Draw Button: width {}, height {}, label {}",
+            self.width, self.height, self.label
+        );
     }
 }
 
